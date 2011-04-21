@@ -4,9 +4,9 @@ $KCODE = 'UTF8'
 require File.dirname(__FILE__) + '/../lib/twitter-text'
 
 class ConformanceTest < Test::Unit::TestCase
-  include Twitter::Extractor
-  include Twitter::Autolink
-  include Twitter::HitHighlighter
+  include TwitterText::Extractor
+  include TwitterText::Autolink
+  include TwitterText::HitHighlighter
 
   def setup
     @conformance_dir = ENV['CONFORMANCE_DIR'] || File.join(File.dirname(__FILE__), 'twitter-text-conformance')

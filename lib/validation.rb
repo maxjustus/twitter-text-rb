@@ -1,4 +1,4 @@
-module Twitter
+module TwitterText
   module Validation extend self
     MAX_LENGTH = 140
 

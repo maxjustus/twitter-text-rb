@@ -2,10 +2,10 @@
 require File.dirname(__FILE__) + '/spec_helper'
 
 class TestExtractor
-  include Twitter::Extractor
+  include TwitterText::Extractor
 end
 
-describe Twitter::Extractor do
+describe TwitterText::Extractor do
   before do
     @extractor = TestExtractor.new
   end

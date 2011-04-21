@@ -1,4 +1,4 @@
-module Twitter
+module TwitterText
   # A module for including Tweet auto-linking in a class. The primary use of this is for helpers/views so they can auto-link
   # usernames, lists, hashtags and URLs.
   module Autolink extend self
@@ -86,7 +86,7 @@ module Twitter
         if index % 4 != 0
           new_text << chunk
         else
-          new_text << chunk.gsub(Twitter::Regex[:auto_link_usernames_or_lists]) do
+          new_text << chunk.gsub(TwitterText::Regex[:auto_link_usernames_or_lists]) do
             before, at, user, slash_listname, after = $1, $2, $3, $4, $'
             if slash_listname && !options[:suppress_lists]
               # the link is a list
@@ -94,7 +94,7 @@ module Twitter
               chunk = yield(list) if block_given?
               "#{before}#{at}<a class=\"#{options[:url_class]} #{options[:list_class]}\" #{target_tag(options)}href=\"#{html_escape(options[:list_url_base])}#{html_escape(list.downcase)}\"#{extra_html}>#{html_escape(chunk)}</a>"
             else
-              if after =~ Twitter::Regex[:end_screen_name_match]
+              if after =~ TwitterText::Regex[:end_screen_name_match]
                 # Followed by something that means we don't autolink
                 "#{before}#{at}#{user}#{slash_listname}"
               else
@@ -127,7 +127,7 @@ module Twitter
       options[:target] ||= DEFAULT_TARGET
       extra_html = HTML_ATTR_NO_FOLLOW unless options[:suppress_no_follow]
 
-      text.gsub(Twitter::Regex[:auto_link_hashtags]) do
+      text.gsub(TwitterText::Regex[:auto_link_hashtags]) do
         before = $1
         hash = $2
         text = $3
@@ -144,7 +144,7 @@ module Twitter
       options = href_options.dup
       options[:rel] = "nofollow" unless options.delete(:suppress_no_follow)
 
-      text.gsub(Twitter::Regex[:valid_url]) do
+      text.gsub(TwitterText::Regex[:valid_url]) do
         all, before, url, protocol, domain, path, query_string = $1, $2, $3, $4, $5, $6, $7
         if !protocol.blank?
           html_attrs = tag_options(options.stringify_keys) || ""

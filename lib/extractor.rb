@@ -41,7 +41,7 @@ class MatchData
   end
 end
 
-module Twitter
+module TwitterText
   # A module for including Tweet parsing in a class. This module provides function for the extraction and processing
   # of usernames, lists, URLs and hashtags.
   module Extractor extend self
@@ -68,9 +68,9 @@ module Twitter
       return [] unless text
 
       possible_screen_names = []
-      text.to_s.scan(Twitter::Regex[:extract_mentions]) do |before, sn, after|
+      text.to_s.scan(TwitterText::Regex[:extract_mentions]) do |before, sn, after|
         extract_mentions_match_data = $~
-        unless after =~ Twitter::Regex[:end_screen_name_match]
+        unless after =~ TwitterText::Regex[:end_screen_name_match]
           start_position = extract_mentions_match_data.char_begin(2) - 1
           end_position = extract_mentions_match_data.char_end(2)
           possible_screen_names << {
@@ -94,7 +94,7 @@ module Twitter
     def extract_reply_screen_name(text) # :yields: username
       return nil unless text
 
-      possible_screen_name = text.match(Twitter::Regex[:extract_reply])
+      possible_screen_name = text.match(TwitterText::Regex[:extract_reply])
       return unless possible_screen_name.respond_to?(:captures)
       screen_name = possible_screen_name.captures.first
       yield screen_name if block_given?
@@ -121,7 +121,7 @@ module Twitter
       return [] unless text
       urls = []
       position = 0
-      text.to_s.scan(Twitter::Regex[:valid_url]) do |all, before, url, protocol, domain, path, query|
+      text.to_s.scan(TwitterText::Regex[:valid_url]) do |all, before, url, protocol, domain, path, query|
         valid_url_match_data = $~
         if !protocol.blank?
           start_position = valid_url_match_data.char_begin(3)
@@ -158,7 +158,7 @@ module Twitter
       return [] unless text
 
       tags = []
-      text.scan(Twitter::Regex[:auto_link_hashtags]) do |before, hash, hash_text|
+      text.scan(TwitterText::Regex[:auto_link_hashtags]) do |before, hash, hash_text|
         start_position = $~.char_begin(2)
         end_position = $~.char_end(3)
         tags << {
